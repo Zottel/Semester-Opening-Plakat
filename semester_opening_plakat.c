@@ -2,18 +2,18 @@
 #include <avr/interrupt.h>
 #include <stdlib.h>
 
-int channels[] = {0x10,
-                  0x30,
-                  0xf0,
-                  0x30,
-                  0x90,
-                  0x30,
-                  0x50,
-                  0x30,
-                  0xc0,
-                  0xd0,
-                  0x30,
-                  0x10};
+int channels[] = {0x000,
+                  0x060,
+                  0x0c0,
+                  0x100,
+                  0x160,
+                  0x1c0,
+                  0x200,
+                  0x260,
+                  0x2c0,
+                  0x300,
+                  0x360,
+                  0x3c0};
 
 void setupChannels() {
 	DDRB |= (1 << PB0) | (1 << PB1) | (1 << PB2);
@@ -21,6 +21,7 @@ void setupChannels() {
 	DDRD |= (1 << PD0) | (1 << PD1) | (1 << PD2) | (1 << PD3) | (1 << PD4) | (1 << PD5) | (1 << PD6);
 }
 
+//__attribute__((always_inline)) static void setChannel(int channel, int value) {
 static void setChannel(int channel, int value) {
 	switch(channel) {
 		case 0:
@@ -56,20 +57,20 @@ static void setChannel(int channel, int value) {
 			PORTD |= (value << PD5);
 			break;
 		case 8:
-			PORTB &= ~(1 << PB2);
-			PORTB |= (value << PB2);
+			PORTD &= ~(1 << PD6);
+			PORTD |= (value << PD6);
 			break;
 		case 9:
-			PORTB &= ~(1 << PB1);
-			PORTB |= (value << PB1);
-			break;
-		case 10:
 			PORTB &= ~(1 << PB0);
 			PORTB |= (value << PB0);
 			break;
+		case 10:
+			PORTB &= ~(1 << PB1);
+			PORTB |= (value << PB1);
+			break;
 		case 11:
-			PORTD &= ~(1 << PD6);
-			PORTD |= (value << PD6);
+			PORTB &= ~(1 << PB2);
+			PORTB |= (value << PB2);
 			break;
 	}
 }
@@ -82,19 +83,18 @@ int main() {
 	while(1) {
 		asm volatile ("nop");
 		for(int i = 0; i < 12; i++) {
-			channels[i] = (channels[i] + 1) % 512;
+			channels[i] = (channels[i] + 1) % 1024;
 		}
 		for(int n = 0; n < 12; n++) {
-			setChannel(n, 1);
+			setChannel(n, 0);
 		}
-		for(int i = 0; i < 256; i++) {
+		for(int i = 0; i < 256; i++)
 			for(int n = 0; n < 12; n++) {
 				if(i < abs(channels[n] - 256)) {
 					asm volatile ("nop");
 				} else {
-					setChannel(n, 0);
+					setChannel(n, 1);
 				}
 			}
-		}
 	}
 }
