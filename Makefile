@@ -1,9 +1,7 @@
-
 FORMAT = ihex
-
 MCU = attiny2313
 CC = avr-gcc
-CFLAGS += -Wall -g -Os -mmcu=$(MCU) -std=gnu99 -pedantic-errors
+CFLAGS += -Wall -g -Os -mmcu=$(MCU) -std=gnu99 -pedantic-errors -Werror -Wno-unused
 LDFLAGS +=
 OBJCOPY = avr-objcopy
 # 8Mhz - without clock devider
@@ -32,3 +30,6 @@ $(TARGET).hex: $(TARGET).elf
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
+
+clean:
+	rm $(TARGET).hex $(TARGET).elf $(OBJS)
