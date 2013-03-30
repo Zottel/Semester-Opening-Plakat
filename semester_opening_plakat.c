@@ -93,6 +93,9 @@ int main() {
 		setChannel(i, 1);
 	}
 	_delay_ms(2000);
+	for(int i = 0; i < 12; i++) {
+		setChannel(i, 0);
+	}
 
 	for(int i = 0; i < 12; i++) {
 		setChannel(i, 1);
