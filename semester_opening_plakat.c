@@ -1,6 +1,9 @@
+#define F_CPU 8000000UL
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdlib.h>
+#include <util/delay.h>
 
 // Initial values of channels.
 // * will be incremented by 1 each step
@@ -84,6 +87,24 @@ int main() {
 	PORTA = 0; PORTB = 0; PORTD = 0;
 	DDRA = 0; DDRB = 0; DDRD = 0;
 	setupChannels();
+	
+	// Debug - LEDs working?
+	for(int i = 0; i < 12; i++) {
+		setChannel(i, 1);
+	}
+	_delay_ms(2000);
+
+	for(int i = 0; i < 12; i++) {
+		setChannel(i, 1);
+		_delay_ms(500);
+	}
+	
+	_delay_ms(5000);
+	
+	for(int i = 0; i < 12; i++) {
+		setChannel(i, 0);
+		_delay_ms(500);
+	}
 	
 	while(1) {
 		asm volatile ("nop");
