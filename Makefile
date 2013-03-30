@@ -1,7 +1,7 @@
 FORMAT = ihex
 MCU = attiny2313
 CC = avr-gcc
-CFLAGS += -Wall -g -O3 -mmcu=$(MCU) -std=gnu99 -pedantic-errors
+CFLAGS += -Wall -g -Os -mmcu=$(MCU) -std=gnu99 -pedantic-errors
 #-Werror -Wno-unused
 LDFLAGS +=
 OBJCOPY = avr-objcopy
